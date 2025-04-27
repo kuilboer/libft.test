@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
+/*   tsts.h                                             :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/27 10:02:51 by okuilboe      ########   odam.nl         */
+/*   Created: 2025/04/27 09:58:49 by okuilboe      #+#    #+#                 */
+/*   Updated: 2025/04/27 10:03:32 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tsts.h"
+#ifndef TSTS_H
+#define TSTS_H
 
-int	main(void)
-{
-	tst_isalnum();
-}
+int	tst_isalnum(int c);
+
+
+#endif
