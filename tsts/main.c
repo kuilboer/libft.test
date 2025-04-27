@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/27 10:02:51 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/27 15:29:34 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 int	main(void)
 {
-	tst_isalnum();
+	//(void)tst_isalnum();
+	run_char_test(ft_isalnum, isalnum, "isalnum");
 }
