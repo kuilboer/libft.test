@@ -6,15 +6,11 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 14:49:22 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/28 15:27:19 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/28 17:26:28 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>	  // For printf() 
-#include <ctype.h>    // For system functions
-#include "libft.h"    
 #include "tsts.h"
-
 
 static int run_char_test(t_char_test_fn ft_func, t_char_test_fn sys_func, char mode)
 {

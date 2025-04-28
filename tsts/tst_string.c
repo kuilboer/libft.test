@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/28 17:16:56 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/28 17:29:07 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,16 @@
 
 static int run_strlen_test(const char *s)
 {
-	return (ft_strlen(s) != strlen(s));
+	//return (ft_strlen(s) != strlen(s));
+	size_t expected = strlen(s);
+    size_t actual = ft_strlen(s);
+
+    if (expected != actual)
+    {
+        printf("FAIL: strlen(\"%s\") expected %zu, got %zu\n", s, expected, actual);
+        return (1);
+    }
+    return (0);
 }
 
 // static int run_strchr_test(const char *s, int c)
