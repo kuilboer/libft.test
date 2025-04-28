@@ -6,38 +6,46 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 14:49:22 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/27 17:51:30 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/28 15:27:19 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
+#include <stdio.h>	  // For printf() 
 #include <ctype.h>    // For system functions
-#include "libft.h"    // Your functions
+#include "libft.h"    
+#include "tsts.h"
 
-/* The typedef for this generalized function is set in the header file. 
-(typedef int (*char_test_fn)(int);) */
 
-int run_char_test(char_test_fn ft_func, char_test_fn sys_func, const char *name)
+static int run_char_test(t_char_test_fn ft_func, t_char_test_fn sys_func, char mode)
 {
-	int failed = 0;
-
-	for (int c = -128; c <= 127; c++)
-	{
-		int expected = sys_func(c) != 0; // normalize to 0/1
-		int actual = ft_func(c) != 0;
-
-		if (expected != actual)
+    for (int c = -128; c <= 127; c++)
+    {
+        if (mode == 'b')
 		{
-			//printf("  FAIL: %s(%d) system=%d ft=%d\n", name, c, expected, actual);
-			//failed = 1;
+			if ((!!ft_func(c)) != (!!sys_func(c)))
+            	return (1); // fail
+		}
+		else if (mode == 'v' )
+		{
+			if (ft_func(c) != sys_func(c))
+			{
+				printf("\t ft %c(%i) != sys %c(%i) for input = %d\n", ft_func(c), ft_func(c), sys_func(c), sys_func(c), c);
+				return (1);
+			}
+		}
+		else
+		{
+			printf("Wrong mode");
 			return (1);
 		}
-	}
-
-	return (0);
-	// if (!failed)
-	// 	printf("PASS: %s ✅\n", name);
-	// else
-	// 	printf("FAILURES in %s ❌\n", name);
+    }
+    return (0); // pass
 }
 
+int test_ft_isalnum(void) { return run_char_test(ft_isalnum, isalnum, 'b'); }
+int test_ft_isalpha(void) { return run_char_test(ft_isalpha, isalpha, 'b'); }
+int test_ft_isascii(void) { return run_char_test(ft_isascii, isascii, 'b'); }
+int test_ft_isdigit(void) { return run_char_test(ft_isdigit, isdigit, 'b'); }
+int test_ft_isprint(void) { return run_char_test(ft_isprint, isprint, 'b'); }
+int test_ft_tolower(void) { return run_char_test(ft_tolower, tolower, 'v'); }
+int test_ft_toupper(void) { return run_char_test(ft_toupper, toupper, 'v'); }

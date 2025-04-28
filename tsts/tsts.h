@@ -6,18 +6,28 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 09:58:49 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/27 17:53:15 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/28 17:04:58 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TSTS_H
 # define TSTS_H
 
-# include "libft.h"
-# include <stdio.h>
-# include <ctype.h>
+# include "libft.h"  // Test targets
+# include <stdio.h>  // For printf() 
+# include <ctype.h>  // For char system functions
+# include <string.h> // For string system functions
 
-typedef int (*char_test_fn)(int);
-int	run_char_test(char_test_fn ft_func, char_test_fn sys_func, const char *name)
+typedef int (*t_test_fn)(void);      // int return: 0 = pass, 1 = fail
+typedef int (*t_char_test_fn)(int);  // generalized test runner for Character classification functions
+
+int	test_ft_isalnum(void);
+int	test_ft_isalpha(void);
+int	test_ft_isascii(void);
+int	test_ft_isdigit(void);
+int	test_ft_isprint(void);
+int	test_ft_tolower(void);
+int	test_ft_toupper(void);
+int	test_ft_strlen(void);
 
 #endif
