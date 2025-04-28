@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/28 17:29:07 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/28 22:33:39 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,25 @@ static int run_strlen_test(const char *s)
     return (0);
 }
 
-// static int run_strchr_test(const char *s, int c)
+static int run_strchr_test(const char *s, int c)
+{
+	char *expected = strchr(s, c);
+	char *actual = ft_strchr(s, c);
+	
+	if (actual != expected)
+	{
+		printf("FAIL: strchr(\"%s\", \"%c\") expected %s(%p), got %s(%p)\n", s, c, expected, expected, actual, actual);
+		return (1); // false
+	}
+	return (0);
+}
 // static int run_strncmp_test(const char *s1, const char *s2, size_t n)
 // static int run_strnstr_test(const char *haystack, const char *needle, size_t len)
 
 int test_ft_strlen(void)
 {
 	int			i = 0;
-	const char	*tests[] = {"", "abc", "42 network", NULL, "\n", " "};
+	const char	*tests[] = {"", "abc", "42 network", "\n", " ", '\0'};
 	const char  arr[] = {'H', 'e', '\0', 'l', 'l','o'};
 
 	i = 0;
@@ -48,15 +59,18 @@ int test_ft_strlen(void)
     return (0); // pass
 }
 
-// int test_ft_strlen(void)
-// {
-//     const char *tests[] = {"", "Hello", "Test123", "\n", " ", 0};
+int test_ft_strchr(void)
+{
+	int i;
+	const char *str[] = {"Hello", "Network42", "not_found", "First_char", "last_chaR",'\0'};
+	const char c[] = {'l', '4', '-', 'F', 'R'};
 
-//     for (int i = 0; tests[i]; i++)
-//     {
-//         if (ft_strlen(tests[i]) != strlen(tests[i]))
-//             return (1);
-//     }
-//     return (0);
-// }
-
+	i = 0;
+	while (str[i])
+	{
+		if (run_strchr_test(str[i], c[i]))
+			return (1); // fail
+		i++;
+	}
+	return (0); // pass
+}
