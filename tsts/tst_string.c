@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/29 15:35:13 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/29 18:46:07 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int run_strchr_test(const char *s, int c)
 	}
 	return (0);
 }
+
 static int run_strrchr_test(const char *s, int c)
 {
 	char *expected = strrchr(s, c);
@@ -50,7 +51,20 @@ static int run_strrchr_test(const char *s, int c)
 	}
 	return (0);
 }
-// static int run_strncmp_test(const char *s1, const char *s2, size_t n)
+
+static int run_strncmp_test(const char *s1, const char *s2, size_t n)
+{
+	int expected =  strncmp(s1, s2, n);
+	int actual = ft_strncmp(s1, s2, n);
+	
+	if (actual != expected)
+	{
+		printf("FAIL: strncmp(\"%s\", \"%s\", %zu) expected %d, got %d\n", s1 ,s2 , n, expected, actual);
+		return (1); // false
+	}
+	return (0);
+}
+
 // static int run_strnstr_test(const char *haystack, const char *needle, size_t len)
 
 int test_ft_strlen(void)
@@ -90,13 +104,30 @@ int test_ft_strchr(void)
 int test_ft_strrchr(void)
 {
 	int i;
-	const char *str[] = {"Hello", "Network42", "not_found", "First_char", "last_chaR",0};
-	const char c[] = {'l', '4', '-', 'F', 'R'};
+	const char *str[] = {"Hello", "Network42", "not_found", "First_char", "last_chaR", "", "Find the termination character",0};
+	const char c[] = {'l', '4', '-', 'F', 'R', 'a', '\0'};
 
 	i = 0;
 	while (str[i])
 	{
 		if (run_strrchr_test(str[i], c[i]))
+			return (1); // fail
+		i++;
+	}
+	return (0); // pass
+}
+
+int test_ft_strncmp(void)
+{
+	int i;
+	const char *str1[] = {"ABC", "ABC", "ABB", "S1_is_longer", "S1_is_shorter", "", "", "S2_is_empty", "HelloWorld",NULL};
+	const char *str2[] = {"ABC", "ABB", "ABC", "S1", "S1_is_shorter_than_S2__", "", "S1_is_empty", "", "HelloApple",NULL};
+	size_t count[] = {3, 3, 3, 3, 15, 15, 3, 3, 5};
+
+	i = 0;
+	while (str1[i] && str2[i] && count[i])
+	{
+		if (run_strncmp_test(str1[i], str2[i], count[i]))
 			return (1); // fail
 		i++;
 	}
