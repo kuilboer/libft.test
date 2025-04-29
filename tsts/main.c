@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/28 20:23:21 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/04/29 15:39:41 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void	run_tests(const char *group_name, t_test_fn *tests, const char **names, int
         int result = tests[i]();
         if (result == 0)
         {
-            printf("PASS: %s ✅\n", names[i]);
+            printf("PASS: %15s ✅\n", names[i]);
             passed++;
         }
         else
         {
-            printf("FAIL: %s ❌\n", names[i]);
+            printf("FAIL: %15s ❌\n", names[i]);
             failed++;
         }
     }
@@ -61,10 +61,12 @@ int main(void)
     t_test_fn string_tests[] = {
         test_ft_strlen,
 		test_ft_strchr,
+        test_ft_strchr,
     };
     const char *string_names[] = {
         "ft_strlen",
 		"ft_strchr",
+        "ft_strrchr",
     };
 
     run_tests("Character Class Tests", char_tests, char_names, sizeof(char_tests)/sizeof(char_tests[0]));
