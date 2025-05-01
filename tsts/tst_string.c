@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 20:16:56 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/01 21:36:25 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,24 @@ static int run_strnstr_test(const char *haystack, const char *needle, size_t len
 		(expected && actual && strcmp(expected, actual) != 0))
 	{
 		printf("FAIL: strnstr(\"%s\", \"%s\", %zu) expected %s, got %s\n", haystack ,needle , len, expected, actual);
+		return (1); // false
+	}
+	return (0);
+}
+
+static int run_strlcat_test(char *dst_ft, char *dst, const char *src, size_t size)
+{
+	// for strlcat it is not enough to compare the return values only because
+	// that only reproduces the original length of the src string.
+	// so we need to destination buffers for each individual function to compare
+	// the results of the actual copy.
+
+	size_t	expected =  strlcat(dst, src, size);
+	size_t	actual = ft_strlcat(dst_ft, src, size);
+	
+	if (actual != expected || strcmp(dst_ft, dst) != 0)
+	{
+		printf("FAIL: strlcat(\"%s\", \"%s\", %zu) expected %s - (%zu), got %s - (%zu)\n", dst ,src , size, dst, expected, dst_ft, actual);
 		return (1); // false
 	}
 	return (0);
@@ -194,6 +212,57 @@ int test_ft_strnstr(void)
 		i++;
 	}
 	return (0); // pass
+}
+
+int test_ft_strlcat(void)
+{
+	size_t		i;
+	int 		result;
+	size_t		elements;
+	char		*dst_vals[] = {"0123456", "6543210",   "",   "", NULL};
+	char		*dst1[5];
+	char		*dst2[5];
+	const char	*src[] = {   "aaaa", "999999999", "", "\0", NULL};
+
+	i = 0;
+	// In order to have changable Array with varying element sizes we need to
+	// alocate memory for the individual elements;
+	while (dst_vals[i])
+	{
+		dst1[i] = malloc(ft_strlen(dst_vals[i]) + 10);
+		dst2[i] = malloc(ft_strlen(dst_vals[i]) + 10);
+		if (!dst1[i] || !dst2[i]){printf("\ntest_ft_strlcpy: Memory allocation failed!\n"); return(1);}
+		strcpy(dst1[i], dst_vals[i]);
+		strcpy(dst2[i], dst_vals[i]);
+		i++;
+	}
+	dst1[i] = NULL;
+	dst2[i] = NULL;
+	elements = i;
+
+	result = 0;
+	i = 0;
+	while (dst1[i] && dst2[i] && src[i])
+	{
+		if (run_strlcat_test(dst1[i], dst2[i], src[i], ft_strlen(dst1[i])) ||
+			run_strlcat_test(dst1[0], dst2[0], src[0], 0) ||	// Edge case where nothing is wrten to dst only strlen(src) is returned.
+			run_strlcat_test(dst1[0], dst2[0], src[0], 1))		// Edge case where only '\0' is written to dst turning its value to "".
+		{
+			result = 1;
+			break;
+			//return (1); // fail
+		}
+		i++;
+	}
+
+	while (elements > 0)
+	{
+		elements--;
+		free(dst1[elements]);
+		free(dst2[elements]);
+	}
+	
+	return (result); // pass
 }
 
 int test_ft_strlcpy(void)

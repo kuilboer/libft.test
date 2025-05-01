@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 15:29:08 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/01 21:37:37 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int main(void)
         test_ft_strchr,
         test_ft_strncmp,
         test_ft_strnstr,
+        test_ft_strlcat,
         test_ft_strlcpy,
     };
     const char *string_names[] = {
@@ -72,6 +73,7 @@ int main(void)
         "ft_strrchr",
         "ft_strncmp",
         "ft_strnstr",
+        "ft_strlcat",
         "ft_strlcpy"
     };
 
