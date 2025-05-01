@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 09:58:49 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/29 17:58:19 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/01 12:09:16 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>  // For printf() 
 # include <ctype.h>  // For char system functions
 # include <string.h> // For string system functions
+# include <bsd/string.h> // For string system functions from libbsd
 
 typedef int (*t_test_fn)(void);      // int return: 0 = pass, 1 = fail
 typedef int (*t_char_test_fn)(int);  // generalized test runner for Character classification functions
@@ -32,5 +33,6 @@ int	test_ft_strlen(void);
 int test_ft_strchr(void);
 int test_ft_strrchr(void);
 int test_ft_strncmp(void);
+int test_ft_strnstr(void);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: okuilboe <okuilboe@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/04/25 16:17:43 by okuilboe      #+#    #+#                  #
-#    Updated: 2025/04/25 20:11:42 by okuilboe      ########   odam.nl          #
+#    Updated: 2025/05/01 12:56:56 by okuilboe      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,9 @@ LIB_LNK_TGT	:= $(CURDIR)/libft
 LIBRARY		= $(LIB_LNK_TGT)/libft.a
 
 CC 			:= cc
-CFLAGS		:= -Wall -Werror -Wextra
+CFLAGS		:= -Wall -Werror -Wextra 
 CPPFLAGS	:= -Ilibft
+LDFLAGS 	:= -lbsd 		# -lbsd Instruct the gcc linker to link the libbsd library
 
 # ==== FILES ====
 
@@ -42,7 +43,7 @@ $(LIB_LNK_TGT):
 	@ln -snf $(LIB_SRC_DIR) $(LIB_LNK_TGT) # Create symbolic link to the libft directory
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIB_LNK_TGT) -lft -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -L$(LIB_LNK_TGT) -lft $(LDFLAGS) -o $(NAME)
 
 %.o: %.c
 	@echo $?

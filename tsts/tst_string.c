@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/04/29 18:46:07 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/01 14:22:01 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,20 @@ static int run_strncmp_test(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-// static int run_strnstr_test(const char *haystack, const char *needle, size_t len)
+static int run_strnstr_test(const char *haystack, const char *needle, size_t len)
+{
+	char	*expected =  strnstr(haystack, needle, len);
+	char	*actual = ft_strnstr(haystack, needle, len);
+	
+	if ((expected == NULL && actual != NULL) || \
+		(expected != NULL && actual == NULL) || \
+		(expected && actual && strcmp(expected, actual) != 0))
+	{
+		printf("FAIL: strnstr(\"%s\", \"%s\", %zu) expected %s, got %s\n", haystack ,needle , len, expected, actual);
+		return (1); // false
+	}
+	return (0);
+}
 
 int test_ft_strlen(void)
 {
@@ -128,6 +141,36 @@ int test_ft_strncmp(void)
 	while (str1[i] && str2[i] && count[i])
 	{
 		if (run_strncmp_test(str1[i], str2[i], count[i]))
+			return (1); // fail
+		i++;
+	}
+	return (0); // pass
+}
+
+int test_ft_strnstr(void){
+	int i;
+	const char *haystack[] = {"String match start", \
+								"String match middle", \
+								"Multiple matches Multi", \
+								"Empty needle.", \
+								"To short len for match", \
+								"tiny haystack abc", \
+								"", \
+								NULL};
+	const char *needle[]   = {"String", \
+								"match", \
+								"Multi", \
+								"", \
+								"len", \
+								"Super large needle abcd", \
+								"", \
+								NULL};
+	size_t count[]         = {6, 12, 22, 25, 25, 10, 0};
+
+	i = 0;
+	while (haystack[i] && needle[i] && count[i])
+	{
+		if (run_strnstr_test(haystack[i], needle[i], count[i]))
 			return (1); // fail
 		i++;
 	}
