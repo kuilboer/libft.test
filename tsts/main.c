@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 12:57:56 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/01 15:29:08 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,15 @@ int main(void)
         test_ft_strchr,
         test_ft_strncmp,
         test_ft_strnstr,
+        test_ft_strlcpy,
     };
     const char *string_names[] = {
         "ft_strlen",
 		"ft_strchr",
         "ft_strrchr",
         "ft_strncmp",
-        "ft_strnstr"
+        "ft_strnstr",
+        "ft_strlcpy"
     };
 
     run_tests("Character Class Tests", char_tests, char_names, sizeof(char_tests)/sizeof(char_tests[0]));
