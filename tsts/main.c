@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 21:37:37 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/04 17:49:23 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,16 @@ int main(void)
         "ft_strlcpy"
     };
 
+    t_test_fn mem_tests[] = {
+        test_ft_memset,
+    };
+	const char *mem_names[] = {
+		"ft_memset"
+    };
+
     run_tests("Character Class Tests", char_tests, char_names, sizeof(char_tests)/sizeof(char_tests[0]));
     run_tests("String Functions Tests", string_tests, string_names, sizeof(string_tests)/sizeof(string_tests[0]));
+	run_tests("Memory Ops. Functions Tests", mem_tests, mem_names, sizeof(mem_tests)/sizeof(mem_tests[0]));
 
     return 0;
 }

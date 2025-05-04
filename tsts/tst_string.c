@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/04 14:55:53 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/04 15:11:06 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,15 +239,6 @@ int test_ft_strlcat(void)
 		strcpy(dst2[i], dst_vals[i]);
 		i++;
 	}
-
-	// test_strlcat("0123456aaa", "aaaa", 11);
-    // test_strlcat("hello", "world", 10);
-    // test_strlcat("", "abcd", 5);
-    // test_strlcat("123456789", "x", 10);
-    // test_strlcat("abc", "", 5);
-    // test_strlcat("", "", 0);
-
-
 
 	dst1[i] = NULL;
 	dst2[i] = NULL;

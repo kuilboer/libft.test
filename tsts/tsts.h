@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 09:58:49 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 21:36:21 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/04 17:44:01 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int test_ft_strncmp(void);
 int test_ft_strnstr(void);
 int test_ft_strlcat(void);
 int test_ft_strlcpy(void);
+int test_ft_memset(void);
 
 #endif
