@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/01 21:36:25 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/04 14:55:53 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ static int run_strlcat_test(char *dst_ft, char *dst, const char *src, size_t siz
 	size_t	expected =  strlcat(dst, src, size);
 	size_t	actual = ft_strlcat(dst_ft, src, size);
 	
+	printf("%s\n", dst);
+
 	if (actual != expected || strcmp(dst_ft, dst) != 0)
 	{
 		printf("FAIL: strlcat(\"%s\", \"%s\", %zu) expected %s - (%zu), got %s - (%zu)\n", dst ,src , size, dst, expected, dst_ft, actual);
@@ -219,10 +221,11 @@ int test_ft_strlcat(void)
 	size_t		i;
 	int 		result;
 	size_t		elements;
-	char		*dst_vals[] = {"0123456", "6543210",   "",   "", NULL};
-	char		*dst1[5];
-	char		*dst2[5];
-	const char	*src[] = {   "aaaa", "999999999", "", "\0", NULL};
+	char		*dst_vals[] = {"0123456", "123456", "hello", "", "abc",    "", NULL};
+	const char	*src[] 		= {   "aaaa",      "x", "world", "",    "", "abc", NULL};
+	size_t 		size[] 		= {        8,        8,      10,  0,     5,     5, 0};
+	char		*dst1[7];
+	char		*dst2[7];
 
 	i = 0;
 	// In order to have changable Array with varying element sizes we need to
@@ -236,6 +239,16 @@ int test_ft_strlcat(void)
 		strcpy(dst2[i], dst_vals[i]);
 		i++;
 	}
+
+	// test_strlcat("0123456aaa", "aaaa", 11);
+    // test_strlcat("hello", "world", 10);
+    // test_strlcat("", "abcd", 5);
+    // test_strlcat("123456789", "x", 10);
+    // test_strlcat("abc", "", 5);
+    // test_strlcat("", "", 0);
+
+
+
 	dst1[i] = NULL;
 	dst2[i] = NULL;
 	elements = i;
@@ -244,9 +257,7 @@ int test_ft_strlcat(void)
 	i = 0;
 	while (dst1[i] && dst2[i] && src[i])
 	{
-		if (run_strlcat_test(dst1[i], dst2[i], src[i], ft_strlen(dst1[i])) ||
-			run_strlcat_test(dst1[0], dst2[0], src[0], 0) ||	// Edge case where nothing is wrten to dst only strlen(src) is returned.
-			run_strlcat_test(dst1[0], dst2[0], src[0], 1))		// Edge case where only '\0' is written to dst turning its value to "".
+		if (run_strlcat_test(dst1[i], dst2[i], src[i], size[i]))
 		{
 			result = 1;
 			break;
