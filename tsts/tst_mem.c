@@ -6,11 +6,29 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 15:49:25 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 16:34:25 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tsts.h"
+
+static int run_memcmp_test(const unsigned char *s1_data, const unsigned char *s2_data, size_t n)
+{
+	int result_sys = memcmp(s1_data, s2_data, n);
+	int result_ft  = ft_memcmp(s1_data, s2_data, n);
+
+	if ((result_sys == 0 && result_ft != 0) ||
+		(result_sys < 0 && result_ft >= 0) ||
+		(result_sys > 0 && result_ft <= 0))
+	{
+		printf("Mismatch in memcmp: n = %zu\n", n);
+		printf("System memcmp: %d, ft_memcmp: %d\n", result_sys, result_ft);
+		for (size_t i = 0; i < n; i++)
+			printf("Byte %02zu: s1 = %02X, s2 = %02X\n", i, s1_data[i], s2_data[i]);
+		return 1; // FAIL
+	}
+	return 0; // PASS
+}
 
 static int run_memcpy_test(const void *src_data, size_t len, size_t n)
 {
@@ -110,6 +128,34 @@ static int run_memset_test(void *sys_s, void *ft_s, int c, size_t n)
 		return (1); //FAIL
 	}
 	return (0); //PASS
+}
+
+int test_ft_memcmp(void)
+{
+	unsigned char buf1[64];
+	unsigned char buf2[64];
+	int fails = 0;
+
+	// Initialize buffers
+	for (size_t i = 0; i < 64; i++) {
+		buf1[i] = (unsigned char)i;
+		buf2[i] = (unsigned char)i;
+	}
+
+	// Modify specific bytes for mismatch tests
+	buf2[10] = 0xFF;
+	buf2[20] = 0x00;
+
+	// Test various lengths
+	size_t sizes[] = {0, 1, 10, 11, 20, 21, 30, 64};
+	size_t count = sizeof(sizes) / sizeof(sizes[0]);
+
+	for (size_t i = 0; i < count; i++) {
+		if (run_memcmp_test(buf1, buf2, sizes[i]) != 0)
+			fails++;
+	}
+
+	return (fails == 0 ? 0 : 1);
 }
 
 int test_ft_memcpy(void)
