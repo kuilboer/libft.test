@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/04 15:11:06 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 15:50:57 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int run_strlcat_test(char *dst_ft, char *dst, const char *src, size_t siz
 	size_t	expected =  strlcat(dst, src, size);
 	size_t	actual = ft_strlcat(dst_ft, src, size);
 	
-	printf("%s\n", dst);
+	//printf("%s\n", dst);
 
 	if (actual != expected || strcmp(dst_ft, dst) != 0)
 	{

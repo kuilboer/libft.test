@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 13:29:07 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 15:49:25 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,59 @@ static int run_memcpy_test(const void *src_data, size_t len, size_t n)
 	free(dst_sys);
 	free(dst_ft);
 	return (0); //PASS
+}
+
+static int run_memmove_test(unsigned char *src_data, size_t len, size_t offset, size_t n, int reverse)
+{
+	// Allocate extra space for offset movement
+	unsigned char *sys_buf = calloc(1, len + offset);
+	unsigned char *ft_buf  = calloc(1, len + offset);
+	if (!sys_buf || !ft_buf)
+		return (-1);
+
+	// Initialize both buffers with src_data
+	memcpy(sys_buf, src_data, len);
+	memcpy(ft_buf, src_data, len);
+
+	// Determine source and destination pointers
+	unsigned char *sys_src, *sys_dst;
+	unsigned char *ft_src, *ft_dst;
+
+	if (!reverse)
+	{
+		sys_src = sys_buf;
+		sys_dst = sys_buf + offset;
+
+		ft_src = ft_buf;
+		ft_dst = ft_buf + offset;
+	}
+	else
+	{
+		sys_src = sys_buf + offset;
+		sys_dst = sys_buf;
+
+		ft_src = ft_buf + offset;
+		ft_dst = ft_buf;
+	}
+
+	void *ret_sys = memmove(sys_dst, sys_src, n);
+	void *ret_ft  = ft_memmove(ft_dst, ft_src, n);
+
+	// Compare the entire region
+	if (memcmp(sys_buf, ft_buf, len + offset) != 0 || ret_sys != sys_dst || ret_ft != ft_dst)
+	{
+		printf("Failed at offset = %zu, n = %zu, reverse = %d\n", offset, n, reverse);
+		for (size_t i = 0; i < len + offset; i++)
+			printf("Byte %02zu: std = %02X, ft = %02X\n", i, sys_buf[i], ft_buf[i]);
+
+		free(sys_buf);
+		free(ft_buf);
+		return (1);
+	}
+
+	free(sys_buf);
+	free(ft_buf);
+	return (0);
 }
 
 static int run_memset_test(void *sys_s, void *ft_s, int c, size_t n)
@@ -80,6 +133,54 @@ int test_ft_memcpy(void)
 	if (fails != 0)
 		return (1);
 	return (0); // pass
+}
+
+int test_ft_memmove(void)
+{
+	unsigned char src_data[64];
+	for (size_t i = 0; i < sizeof(src_data); i++)
+		src_data[i] = (unsigned char)(i + 1);
+
+	int fails = 0;
+
+	struct {
+		size_t offset;
+		size_t n;
+	} tests[] = {
+		{0, 0},      // No-op
+		{0, 1},      // Single byte
+		{2, 10},     // Forward overlap
+		{10, 10},    // Backward overlap
+		{5, 20},     // Medium backward
+		{16, 32},    // Large backward (more than half)
+		{32, 32},    // Full buffer backward
+		{4, 64},     // Full buffer with large n
+		{0, 100},    // Overrun beyond len (invalid, expect test to skip)
+	};
+
+	// for (size_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++)
+	// {
+	// 	if (run_memmove_test(src_data, 32, tests[i].offset, tests[i].n, 0)) // forward
+	// 		fails++;
+	// 	if (run_memmove_test(src_data, 32, tests[i].offset, tests[i].n, 1)) // backward
+	// 		fails++;
+	// }
+
+	for (size_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++)
+	{
+		if (tests[i].n > 32 + tests[i].offset)
+		{
+			//printf("Skipping test: offset=%zu, n=%zu (out of bounds)\n", tests[i].offset, tests[i].n);
+			continue;
+		}
+		if (run_memmove_test(src_data, 32, tests[i].offset, tests[i].n, 0)) // forward
+			fails++;
+		if (run_memmove_test(src_data, 32, tests[i].offset, tests[i].n, 1)) // backward
+			fails++;
+	}
+
+
+	return (fails == 0 ? 0 : 1);
 }
 
 int test_ft_memset(void)
