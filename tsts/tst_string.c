@@ -6,11 +6,25 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 15:50:57 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 23:18:04 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tsts.h"
+
+static int run_atoi_test(const char *input)
+{
+	int sys_result = atoi(input);
+	int ft_result  = ft_atoi(input);
+
+	if (sys_result != ft_result)
+	{
+		printf("Mismatch in atoi for input: \"%s\"\n", input);
+		printf("System atoi: %d, ft_atoi: %d\n", sys_result, ft_result);
+		return 1;  // FAIL
+	}
+	return 0;  // PASS
+}
 
 static int run_strlen_test(const char *s)
 {
@@ -117,6 +131,49 @@ static int run_strlcpy_test(char *dst_ft, char *dst, const char *src, size_t siz
 	}
 	return (0);
 }
+
+int test_ft_atoi(void)
+{
+	const char *tests[] = {
+		// Valid
+		"0",
+		"1",
+		"-1",
+		"42",
+		"+42",
+		"   123",
+		"\t\n\r\v\f456",
+		"0000123",
+		" +00123xyz",
+		"   -789abc",
+		// Edge/Invalid
+		"",
+		" ",
+		"abc",
+		"abc123",
+		"++1",        // invalid double sign
+		"--1",        // invalid double sign
+		"+-42",       // invalid mixed signs
+		"-+42",       // invalid mixed signs
+		"+ 42",       // space between sign and number → invalid
+		"- 42",
+		"123 456",    // space after number
+		"999999999999999999999",  // overflow
+		"-999999999999999999999", // underflow
+	};
+
+	int fails = 0;
+	size_t count = sizeof(tests) / sizeof(tests[0]);
+
+	for (size_t i = 0; i < count; i++)
+	{
+		if (run_atoi_test(tests[i]) != 0)
+			fails++;
+	}
+
+	return (fails == 0 ? 0 : 1);
+}
+
 
 int test_ft_strlen(void)
 {
