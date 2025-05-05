@@ -6,11 +6,44 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 16:34:25 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 17:05:26 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tsts.h"
+
+static int run_bzero_test(size_t total_len, size_t zero_len)
+{
+	unsigned char *sys_buf = calloc(1, total_len);
+	unsigned char *ft_buf  = calloc(1, total_len);
+	if (!sys_buf || !ft_buf)
+		return -1;
+
+	// Fill with predictable non-zero data
+	for (size_t i = 0; i < total_len; i++) {
+		sys_buf[i] = (unsigned char)(i + 1);
+		ft_buf[i]  = (unsigned char)(i + 1);
+	}
+
+	// Apply bzero to part of the buffer
+	bzero(sys_buf, zero_len);
+	ft_bzero(ft_buf, zero_len);
+
+	// Compare the full buffer to verify correct zeroing and preserved data
+	if (memcmp(sys_buf, ft_buf, total_len) != 0) {
+		printf("Mismatch in bzero: total_len = %zu, zero_len = %zu\n", total_len, zero_len);
+		for (size_t i = 0; i < total_len; i++) {
+			printf("Byte %02zu: sys = %02X, ft = %02X\n", i, sys_buf[i], ft_buf[i]);
+		}
+		free(sys_buf);
+		free(ft_buf);
+		return 1;  // FAIL
+	}
+
+	free(sys_buf);
+	free(ft_buf);
+	return 0;  // PASS
+}
 
 static int run_memcmp_test(const unsigned char *s1_data, const unsigned char *s2_data, size_t n)
 {
@@ -128,6 +161,31 @@ static int run_memset_test(void *sys_s, void *ft_s, int c, size_t n)
 		return (1); //FAIL
 	}
 	return (0); //PASS
+}
+
+int test_ft_bzero(void)
+{
+	struct {
+		size_t total_len;
+		size_t zero_len;
+	} tests[] = {
+		{0, 0},
+		{16, 0},   // zero none
+		{16, 1},   // zero 1 byte
+		{16, 8},   // half zero
+		{16, 16},  // full zero
+		{64, 32},  // partial on larger buffer
+		{64, 64},  // full zero
+		{64, 63},  // near-full
+	};
+
+	int fails = 0;
+	for (size_t i = 0; i < sizeof(tests)/sizeof(tests[0]); i++) {
+		if (run_bzero_test(tests[i].total_len, tests[i].zero_len) != 0)
+			fails++;
+	}
+
+	return (fails == 0 ? 0 : 1);
 }
 
 int test_ft_memcmp(void)

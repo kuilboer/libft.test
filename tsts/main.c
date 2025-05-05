@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 16:38:57 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/05 17:01:11 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,14 @@ int main(void)
 	};
 
 	t_test_fn mem_tests[] = {
+		test_ft_bzero,
 		test_ft_memcmp,
 		test_ft_memcpy,
 		test_ft_memmove,
 		test_ft_memset,
 	};
 	const char *mem_names[] = {
+		"ft_bzero",
 		"ft_memcmp",
 		"ft_memcpy",
 		"ft_memmove",
