@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 17:05:26 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/07 14:47:10 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,27 @@ static int run_bzero_test(size_t total_len, size_t zero_len)
 	free(sys_buf);
 	free(ft_buf);
 	return 0;  // PASS
+}
+
+static int	run_calloc_test(size_t nmemb, size_t size)
+{
+	void	*res = ft_calloc(nmemb, size);
+	void	*expected = calloc(nmemb, size);
+
+	if (!res && !expected)
+		return (0);  // OK: both failed
+
+	if (!res || !expected)
+	{
+		free(res);
+		free(expected);
+		return (1);  // Mismatch: one succeeded, one failed
+	}
+
+	int success = memcmp(res, expected, nmemb * size) == 0;
+	free(res);
+	free(expected);
+	return (!success);  // Return 1 if mismatch, 0 if identical
 }
 
 static int run_memcmp_test(const unsigned char *s1_data, const unsigned char *s2_data, size_t n)
@@ -186,6 +207,40 @@ int test_ft_bzero(void)
 	}
 
 	return (fails == 0 ? 0 : 1);
+}
+
+int	test_ft_calloc(void)
+{
+	//print_test_header("ft_calloc");
+
+	size_t test_cases[][2] = {
+		{0, 0},
+		{1, 0},
+		{0, 1},
+		{1, 1},
+		{16, 2},
+		{128, 64},
+		{4096, 1},
+		{SIZE_MAX, 2},                   // overflow
+		{2, SIZE_MAX},                   // overflow
+		{SIZE_MAX / 2 + 1, 3},           // overflow
+		{7, 13},                        // unaligned size
+		{SIZE_MAX / 2, 2},              // max valid allocation
+		{SIZE_MAX / 4, 4},              // large but safe
+		{1024 * 1024, 128},             // ~128MB
+	};
+
+	int failures = 0;
+	for (size_t i = 0; i < sizeof(test_cases) / sizeof(test_cases[0]); ++i)
+	{
+		if (run_calloc_test(test_cases[i][0], test_cases[i][1]))
+		{
+			printf("❌ ft_calloc failed for nmemb = %zu, size = %zu\n",
+				test_cases[i][0], test_cases[i][1]);
+			failures++;
+		}
+	}
+	return (failures > 0);
 }
 
 int test_ft_memcmp(void)
