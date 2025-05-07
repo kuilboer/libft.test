@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/05 23:18:04 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/07 17:20:32 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,27 @@ static int run_atoi_test(const char *input)
 		return 1;  // FAIL
 	}
 	return 0;  // PASS
+}
+
+static int run_strdup_test(const char *input)
+{
+	char *expected = strdup(input);
+	char *actual = ft_strdup(input);
+	int failed = 0;
+
+	if ((expected == NULL && actual != NULL) || \
+		(expected != NULL && actual == NULL) || \
+		(expected && actual && strcmp(expected, actual) != 0))
+	{
+		printf("FAIL: ft_strdup(\"%s\") expected \"%s\", got \"%s\"\n",
+			input,
+			expected ? expected : "NULL",
+			actual ? actual : "NULL");
+		failed = 1;
+	}
+	free(expected);
+	free(actual);
+	return failed;
 }
 
 static int run_strlen_test(const char *s)
@@ -174,6 +195,26 @@ int test_ft_atoi(void)
 	return (fails == 0 ? 0 : 1);
 }
 
+int test_ft_strdup(void)
+{
+	const char *inputs[] = {
+		"Hello, world!",
+		"",
+		"The quick brown fox jumps over the lazy dog",
+		"1234567890",
+		"A",
+		NULL
+	};
+	int i = 0;
+
+	while (inputs[i])
+	{
+		if (run_strdup_test(inputs[i]))
+			return (1); // fail
+		i++;
+	}
+	return (0); // all passed
+}
 
 int test_ft_strlen(void)
 {
