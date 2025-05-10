@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/09 19:57:24 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/10 15:35:29 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,97 +20,66 @@
 // Trusted reference function (from GLib or your own implementation)
 //char *glib__substr(const char *s, unsigned int start, size_t len);  // assume this exists
 
-void print_split(char **split)
+static int assert_split(char **actual, const char **expected)
 {
-	int i = 0;
-
-	if (!split)
-	{
-		printf("(null)\n");
-		return;
-	}
-
-	while (split[i])
-	{
-		printf("[%d] \"%s\"\n", i, split[i]);
-		i++;
-	}
-	printf("[end]\n");
+    int i = 0;
+    while (expected[i] || actual[i])
+    {
+        if (!actual[i] || !expected[i])
+        {
+            printf("FAIL: Length mismatch\n");
+            return 1;
+        }
+        if (strcmp(actual[i], expected[i]) != 0)
+        {
+            printf("FAIL: Expected '%s', got '%s'\n", expected[i], actual[i]);
+            return 1;
+        }
+        i++;
+    }
+    return 0;
 }
 
-static int compare_split_arrays(char **a, char **b)
+static void free_split(char **arr)
 {
-	int i = 0;
-
-	while (a && b && a[i] && b[i])
-	{
-		if (!a[i] || !b[i])
-		{
-			printf("NULL pointer at compare[%d]: a=%p, b=%p\n", i, (void *)a[i], (void *)b[i]);
-			return 1;
-		}
-		printf("compare[%d]: a=\"%s\", b=\"%s\"\n", i, a[i], b[i]);
-		if (strcmp(a[i], b[i]) != 0)
-			return 1;
-		i++;
-	}
-	if ((a && a[i]) || (b && b[i]))
-		return 1; // arrays are of different length
-	return 0;
+    if (!arr) return;
+    for (int i = 0; arr[i]; i++)
+        free(arr[i]);
+    free(arr);
 }
 
-static int run_split_test(const char *s, char delim)
+int test_ft_split(void)
 {
-	// printf("Testing: \"%s\"\n", s ? s : "NULL");
-		
-	char **expected = ref__split(s, delim);
-	if (!expected)
-	{
-		printf("ref__split returned NULL ❌\n");
-		return 1;
-	}
+    int failed = 0;
 
-	printf("expected[0] = %p\n", (void *)expected[0]);
-	for (int j = 0; j < 4; j++)
-		printf("expected[%d] = %s\n", j, expected[j] ? expected[j] : "(null)");
-	
-	char **actual = ft_split(s, delim);
-	if (!actual)
-	{
-   	 printf("FAIL: ft_split(\"%s\", '%c') ➜ returned NULL unexpectedly\n", s, delim);
-   	 return 1;
-	}
-	printf("actual[0] = %p\n", (void *)actual[0]);
-	for (int j = 0; j < 4; j++)
-		printf("actual[%d] = %s\n", j, actual[j] ? actual[j] : "(null)");
+    struct {
+        const char *input;
+        char delim;
+        const char *expected[10];
+    } tests[] = {
+        {"a,b,c", ',', {"a", "b", "c", NULL}},
+        {",a,,b,", ',', {"a", "b", NULL}},
+        {",,,", ',', {NULL}},
+        {"abc", ',', {"abc", NULL}},
+        {"", ',', {NULL}},
+		{"\0aaa\0bb", '\0', {NULL}},
+        {NULL, ',', {NULL}},
+    };
 
-	printf("\nStart compare.\n");
-	int failed = compare_split_arrays(expected, actual);
-	printf("End compare.\n");
-	if (failed)
-	{
-		printf("FAIL: ft_split(\"%s\", '%c')\n", s ? s : "NULL", delim);
-		printf("Expected:\n");
-		print_split(expected);
-		printf("Got:\n");
-		print_split(actual);
-	}
+    for (int t = 0; tests[t].input != NULL || tests[t].expected[0] != NULL; t++) {
+        printf("Testing: '%s'\n", tests[t].input ? tests[t].input : "(null)");
+        char **actual = ft_split(tests[t].input, tests[t].delim);
+        if (assert_split(actual, tests[t].expected)) {
+            printf("Test %d failed.\n\n", t);
+            failed = 1;
+        } else {
+            printf("PASS\n\n");
+        }
+        free_split(actual);
+    }
 
-	// free both
-	if (expected)
-	{
-		for (int i = 0; expected[i]; i++) free(expected[i]);
-		free(expected);
-	}
-	if (actual)
-	{
-		for (int i = 0; actual[i]; i++) free(actual[i]);
-		free(actual);
-	}
-
-	return failed;
+    return failed;
 }
-
 
 static int run_strtrim_test(const char *s1, const char *set)
 {
@@ -173,41 +142,6 @@ static int run_substr_test(const char *input, unsigned int start, size_t len)
 	free(expected);
 	free(actual);
 	return failed;
-}
-
-int test_ft_split(void)
-{
-	const char *inputs[] = {
-		"a,b,c",
-		",,a,,b,",
-		"",
-		",,,",
-		"abc",
-		"   split   this please  ",
-		NULL
-	};
-
-	char delimiters[] = {
-		',',
-		',',
-		',',
-		',',
-		'x',
-		' ',
-	};
-	
-	for (int i = 0; inputs[i]; i++)
-	{
-		printf("Testing: \"%s\"\n", inputs[i] ? inputs[i] : "NULL");
-		if (run_split_test(inputs[i], delimiters[i]))
-			return 1;
-	}
-
-	// NULL input test
-	if (run_split_test(NULL, ','))
-		return 1;
-
-	return 0;
 }
 
 int test_ft_strtrim(void)
