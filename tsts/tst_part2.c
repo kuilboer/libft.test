@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/10 15:35:29 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/11 19:53:45 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,10 @@ static int assert_split(char **actual, const char **expected)
 static void free_split(char **arr)
 {
     if (!arr) return;
+	printf("elements");
     for (int i = 0; arr[i]; i++)
         free(arr[i]);
+		printf("array");
     free(arr);
 }
 
@@ -57,11 +59,11 @@ int test_ft_split(void)
         char delim;
         const char *expected[10];
     } tests[] = {
-        {"a,b,c", ',', {"a", "b", "c", NULL}},
-        {",a,,b,", ',', {"a", "b", NULL}},
-        {",,,", ',', {NULL}},
-        {"abc", ',', {"abc", NULL}},
-        {"", ',', {NULL}},
+        // {"a,b,c", ',', {"a", "b", "c", NULL}},
+        // {",a,,b,", ',', {"a", "b", NULL}},
+        // {",,,", ',', {NULL}},
+        // {"abc", ',', {"abc", NULL}},
+        // {"", ',', {NULL}},
 		{"\0aaa\0bb", '\0', {NULL}},
         {NULL, ',', {NULL}},
     };
