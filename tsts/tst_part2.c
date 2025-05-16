@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/11 19:53:45 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/16 19:15:39 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,44 +50,13 @@ static void free_split(char **arr)
     free(arr);
 }
 
-int test_ft_split(void)
+static int run_strtrim_test(const char *s1, const char *set, const char *expected)
 {
-    int failed = 0;
-
-    struct {
-        const char *input;
-        char delim;
-        const char *expected[10];
-    } tests[] = {
-        // {"a,b,c", ',', {"a", "b", "c", NULL}},
-        // {",a,,b,", ',', {"a", "b", NULL}},
-        // {",,,", ',', {NULL}},
-        // {"abc", ',', {"abc", NULL}},
-        // {"", ',', {NULL}},
-		{"\0aaa\0bb", '\0', {NULL}},
-        {NULL, ',', {NULL}},
-    };
-
-    for (int t = 0; tests[t].input != NULL || tests[t].expected[0] != NULL; t++) {
-        printf("Testing: '%s'\n", tests[t].input ? tests[t].input : "(null)");
-        char **actual = ft_split(tests[t].input, tests[t].delim);
-        if (assert_split(actual, tests[t].expected)) {
-            printf("Test %d failed.\n\n", t);
-            failed = 1;
-        } else {
-            printf("PASS\n\n");
-        }
-        free_split(actual);
-    }
-
-    return failed;
-}
-
-static int run_strtrim_test(const char *s1, const char *set)
-{
-	char *expected = ref__strtrim(s1, set);
+	//char *expected = ref__strtrim(s1, set);
 	char *actual = ft_strtrim(s1, set);
 	int failed = 0;
+
+	printf("expected = %s\nactual = %s\n\n", expected, actual);
 
 	if ((expected == NULL && actual != NULL) ||
 		(expected != NULL && actual == NULL) ||
@@ -100,7 +69,7 @@ static int run_strtrim_test(const char *s1, const char *set)
 		failed = 1;
 	}
 
-	free(expected);
+	//free(expected);
 	free(actual);
 	return failed;
 }
@@ -146,39 +115,73 @@ static int run_substr_test(const char *input, unsigned int start, size_t len)
 	return failed;
 }
 
+int test_ft_split(void)
+{
+    int failed = 0;
+
+    struct {
+        const char *input;
+        char delim;
+        const char *expected[10];
+    } tests[] = {
+        // {"a,b,c", ',', {"a", "b", "c", NULL}},
+        // {",a,,b,", ',', {"a", "b", NULL}},
+        // {",,,", ',', {NULL}},
+        // {"abc", ',', {"abc", NULL}},
+        // {"", ',', {NULL}},
+		{"\0aaa\0bb", '\0', {NULL}},
+        {NULL, ',', {NULL}},
+    };
+
+    for (int t = 0; tests[t].input != NULL || tests[t].expected[0] != NULL; t++) {
+        printf("Testing: '%s'\n", tests[t].input ? tests[t].input : "(null)");
+        char **actual = ft_split(tests[t].input, tests[t].delim);
+        if (assert_split(actual, tests[t].expected)) {
+            printf("Test %d failed.\n\n", t);
+            failed = 1;
+        } else {
+            printf("PASS\n\n");
+        }
+        free_split(actual);
+    }
+
+    return failed;
+}
+
 int test_ft_strtrim(void)
 {
-	const char *inputs[] = {
-		"  hello  ",
-		"---abc---",
-		"abc",
-		"aaaaa",
-		"",
-		NULL
-	};
+	struct {
+        const char *strs;
+        const char *sets;
+		const char *expected;
+        //const char *expected;
+    } tests[] = {
+        {"  hello  ", " ", "hello"},
+		{" . abc", " ", ". abc"},
+		{"tetettsetlerte", "te", "setler"},
+		{"lorem \n ipsum \t dolor \n sit \t amet", " ", "lorem \n ipsum \t dolor \n sit \t amet"},
+		{"lorem ipsum dolor sit amet", "te", "lorem ipsum dolor sit am"},
+		{"  \t \t \n   \n\n\n\t", "", "  \t \t \n   \n\n\n\t" },
+		{"   \t  \n\n \t\t  \n\n\nHello \t  Please\n Trim me !\n   \n \n \t\t\n  ", " \t\n", "Hello \t  Please\n Trim me !"},
+		{"", "", ""},
+		{NULL, "-", NULL},
+		{"abc", NULL, NULL},
+		{NULL, NULL, NULL},
+    };
 
-	const char *sets[] = {
-		" ",
-		"-",
-		"x",
-		"a",
-		"a",
-		NULL
-	};
-
-	for (int i = 0; inputs[i] || sets[i]; i++)
+	for (int i = 0; tests[i].strs || tests[i].sets; i++)
 	{
-		if (run_strtrim_test(inputs[i], sets[i]))
+		if (run_strtrim_test(tests[i].strs, tests[i].sets, tests[i].expected))
 			return 1;
 	}
 
-	// Extra expliciete NULL-tests
-	if (run_strtrim_test(NULL, "-"))
-		return 1;
-	if (run_strtrim_test("abc", NULL))
-		return 1;
-	if (run_strtrim_test(NULL, NULL))
-		return 1;
+	//Extra expliciete NULL-tests
+	// if (run_strtrim_test(NULL, "-"))
+	// 	return 1;
+	// if (run_strtrim_test("abc", NULL))
+	// 	return 1;
+	// if (run_strtrim_test(NULL, NULL))
+	// 	return 1;
 
 	return 0;
 }
