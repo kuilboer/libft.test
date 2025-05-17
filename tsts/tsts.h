@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/27 09:58:49 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/08 18:23:15 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 13:24:05 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ int test_ft_substr(void);
 int test_ft_strjoin(void);
 int test_ft_strtrim(void);
 int test_ft_split(void);
+int	test_ft_itoa(void);
 
 #endif

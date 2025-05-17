@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/08 18:23:12 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 13:24:09 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,14 @@ int main(void)
 		test_ft_strjoin,
 		test_ft_strtrim,
 		test_ft_split,
+		test_ft_itoa,
 	};
 	const char *part2_names[] = {
 		"ft_substr",
 		"ft_strjoin",
 		"ft_strtrim",
-		"test_ft_split"
+		"ft_split",
+		"ft_itoa"
 	};
 
 	run_tests("Character Class Tests", char_tests, char_names, sizeof(char_tests)/sizeof(char_tests[0]));

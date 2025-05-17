@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/16 19:15:39 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 15:39:36 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,8 @@ static int assert_split(char **actual, const char **expected)
 static void free_split(char **arr)
 {
     if (!arr) return;
-	printf("elements");
     for (int i = 0; arr[i]; i++)
         free(arr[i]);
-		printf("array");
     free(arr);
 }
 
@@ -55,8 +53,6 @@ static int run_strtrim_test(const char *s1, const char *set, const char *expecte
 	//char *expected = ref__strtrim(s1, set);
 	char *actual = ft_strtrim(s1, set);
 	int failed = 0;
-
-	printf("expected = %s\nactual = %s\n\n", expected, actual);
 
 	if ((expected == NULL && actual != NULL) ||
 		(expected != NULL && actual == NULL) ||
@@ -115,6 +111,22 @@ static int run_substr_test(const char *input, unsigned int start, size_t len)
 	return failed;
 }
 
+static int run_itoa_test(int n, const char *exp)
+{
+	char	*actual = ft_itoa(n);
+	int		n_len = ft_strlen(actual);
+	int		exp_len = ft_strlen(exp);
+
+	if (n_len == exp_len && !(ft_strncmp(exp, actual, exp_len)))
+		return (0); // pass
+
+	printf("\nInput int: \t%d\nExpected: \t%s\nActual: \t%s\n\n", n, exp, actual);
+	printf("exp_len = %d \nact_len = %d\n", exp_len, n_len);
+	printf("ft_strncmp = %d\n\n", ft_strncmp(exp, actual, exp_len));
+	free(actual);
+	return (1); //fail
+}
+
 int test_ft_split(void)
 {
     int failed = 0;
@@ -134,13 +146,11 @@ int test_ft_split(void)
     };
 
     for (int t = 0; tests[t].input != NULL || tests[t].expected[0] != NULL; t++) {
-        printf("Testing: '%s'\n", tests[t].input ? tests[t].input : "(null)");
         char **actual = ft_split(tests[t].input, tests[t].delim);
         if (assert_split(actual, tests[t].expected)) {
             printf("Test %d failed.\n\n", t);
             failed = 1;
         } else {
-            printf("PASS\n\n");
         }
         free_split(actual);
     }
@@ -174,14 +184,6 @@ int test_ft_strtrim(void)
 		if (run_strtrim_test(tests[i].strs, tests[i].sets, tests[i].expected))
 			return 1;
 	}
-
-	//Extra expliciete NULL-tests
-	// if (run_strtrim_test(NULL, "-"))
-	// 	return 1;
-	// if (run_strtrim_test("abc", NULL))
-	// 	return 1;
-	// if (run_strtrim_test(NULL, NULL))
-	// 	return 1;
 
 	return 0;
 }
@@ -245,4 +247,27 @@ int test_ft_substr(void)
 		return 1;
 
 	return 0; // all passed
+}
+
+int	test_ft_itoa(void)
+{
+	struct {
+        const int numbers;
+		const char *expected;
+    } tests[] = {
+		{123, "123"},
+        {1234567890, "1234567890"},
+		{0, "0"},
+		{-10, "-10"},
+		{INT_MIN, "-2147483648"},
+		{INT_MAX, NULL},
+    };
+
+	for (int i = 0; !(tests[i].numbers == INT_MAX && tests[i].expected == NULL) ; i++)
+	{
+		if (run_itoa_test(tests[i].numbers, tests[i].expected))
+			return 1;
+	}
+	return (0);
+
 }
