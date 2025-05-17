@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:52:32 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 17:32:37 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 19:28:51 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ char uppercase_even(unsigned int i, char c);
 char index_to_char(unsigned int i, char c);
 char constant_Z(unsigned int i, char c);
 
-//void	print_split(char **split);
+// ft_striteri() testhelper functions:
+
+void to_upper(unsigned int i, char *c);
+void upper_even(unsigned int i, char *c);
+void add_index_to_char(unsigned int i, char *c);
+void noop(unsigned int i, char *c);
 
 #endif

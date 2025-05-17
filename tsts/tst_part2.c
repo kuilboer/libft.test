@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 17:38:01 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 19:36:18 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,18 @@ static int run_strmapi_test(const char *input, char (*f)(unsigned int, char), co
 	}
 	free(result);
 	return !success; // return 0 if OK, 1 if failed
+}
+
+static int run_striteri_test(char *input, void (*f)(unsigned int, char *), const char *expected)
+{
+	char buffer[100];
+	strcpy(buffer, input);
+	ft_striteri(buffer, f);
+	if (strcmp(buffer, expected) == 0)
+		return (0); //Success
+	else
+		printf("❌ Failed: got \"%s\", expected \"%s\"\n", buffer, expected);
+	return (1); // Failure
 }
 
 int test_ft_split(void)
@@ -296,4 +308,20 @@ int test_ft_strmapi(void)
 	fails += run_strmapi_test("", identity, "");
 
 	return fails;
+}
+
+int test_ft_striteri(void)
+{
+	int fails = 0;
+
+	fails += run_striteri_test("abc", to_upper, "ABC");
+	fails += run_striteri_test("abcde", upper_even, "AbCdE");
+	fails += run_striteri_test("abc", add_index_to_char, "ace");
+	fails += run_striteri_test("abc", noop, "abc");
+	fails += run_striteri_test("", to_upper, "");
+
+	// Optionally test NULL input
+	// ft_striteri(NULL, to_upper);  // Should do nothing / not crash
+
+	return (fails);
 }
