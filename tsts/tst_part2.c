@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 15:39:36 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 17:38:01 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,19 @@ static int run_itoa_test(int n, const char *exp)
 	printf("ft_strncmp = %d\n\n", ft_strncmp(exp, actual, exp_len));
 	free(actual);
 	return (1); //fail
+}
+
+static int run_strmapi_test(const char *input, char (*f)(unsigned int, char), const char *expected)
+{
+	char *result = ft_strmapi(input, f);
+	int success = strcmp(result, expected) == 0;
+	if (!success)
+	{
+		printf("❌ ft_strmapi(\"%s\") with mapper failed\nExpected: \"%s\"\nGot     : \"%s\"\n",
+			input, expected, result);
+	}
+	free(result);
+	return !success; // return 0 if OK, 1 if failed
 }
 
 int test_ft_split(void)
@@ -270,4 +283,17 @@ int	test_ft_itoa(void)
 	}
 	return (0);
 
+}
+
+int test_ft_strmapi(void)
+{
+	int fails = 0;
+
+	fails += run_strmapi_test("hello", identity, "hello");
+	fails += run_strmapi_test("hello", uppercase_even, "HeLlO");
+	fails += run_strmapi_test("abcde", index_to_char, "01234");
+	fails += run_strmapi_test("test", constant_Z, "ZZZZ");
+	fails += run_strmapi_test("", identity, "");
+
+	return fails;
 }
