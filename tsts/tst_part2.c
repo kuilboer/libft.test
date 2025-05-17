@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 20:48:59 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 21:13:24 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,34 @@ static int run_putchar_fd_test(char input_char)
 
 	if (read_buf[0] != input_char)
 		return (1);
+	return (0);
+}
+
+static int run_putstr_fd_test(const char *input)
+{
+	const char	*tmp_file = "tmp_putstr_fd.txt";
+	char		read_buf[1024] = {0}; // Buffer to read back the file
+	int			fd;
+	ssize_t		bytes_read;
+
+	fd = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (1);
+
+	ft_putstr_fd((char *)input, fd); // Cast to match ft_putstr_fd prototype
+	lseek(fd, 0, SEEK_SET);
+	bytes_read = read(fd, read_buf, sizeof(read_buf) - 1);
+	close(fd);
+	unlink(tmp_file);
+
+	if (bytes_read < 0)
+		return (1);
+
+	read_buf[bytes_read] = '\0'; // Null-terminate
+
+	if (strcmp(read_buf, input) != 0)
+		return (1);
+
 	return (0);
 }
 
@@ -362,6 +390,31 @@ int test_ft_putchar_fd(void)
 		if (run_putchar_fd_test(test_chars[i]) != 0)
 		{
 			printf("❌ Test %d failed: input='%c' (ASCII %d)\n", i, test_chars[i], test_chars[i]);
+			result = 1;
+		}
+	}
+
+	return result;
+}
+
+int test_ft_putstr_fd(void)
+{
+	int result = 0;
+
+	const char *tests[] = {
+		"Hello, world!",
+		"",
+		"Line1\nLine2\n",
+		"💡 Unicode? Nope. Just plain C.",
+		"0123456789",
+		NULL
+	};
+
+	for (int i = 0; tests[i] != NULL; i++)
+	{
+		if (run_putstr_fd_test(tests[i]) != 0)
+		{
+			printf("❌ Test %d failed: \"%s\"\n", i, tests[i]);
 			result = 1;
 		}
 	}
