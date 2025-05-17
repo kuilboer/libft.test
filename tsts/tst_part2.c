@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 21:33:34 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 21:56:58 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,6 +236,37 @@ static int run_putendl_fd_test(const char *input)
 	return (0);
 }
 
+static int run_putnbr_fd_test(int input)
+{
+	const char	*tmp_file = "tmp_putnbr_fd.txt";
+	char		read_buf[64] = {0};    // Enough to hold any int
+	char		expected_buf[64] = {0};
+	int			fd;
+	ssize_t		bytes_read;
+
+	fd = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (1);
+
+	ft_putnbr_fd(input, fd);
+
+	lseek(fd, 0, SEEK_SET);
+	bytes_read = read(fd, read_buf, sizeof(read_buf) - 1);
+	close(fd);
+	unlink(tmp_file);
+
+	if (bytes_read < 0)
+		return (1);
+
+	read_buf[bytes_read] = '\0';
+	sprintf(expected_buf, "%d", input);
+
+	if (strcmp(read_buf, expected_buf) != 0)
+		return (1);
+
+	return (0);
+}
+
 int test_ft_split(void)
 {
     int failed = 0;
@@ -458,8 +489,6 @@ int test_ft_putendl_fd(void)
 {
 	int result = 0;
 
-	printf("Running ft_putendl_fd tests...\n");
-
 	const char *tests[] = {
 		"Hello, newline!",
 		"",
@@ -473,6 +502,34 @@ int test_ft_putendl_fd(void)
 		if (run_putendl_fd_test(tests[i]) != 0)
 		{
 			printf("❌ Test %d failed: \"%s\"\n", i, tests[i]);
+			result = 1;
+		}
+	}
+
+	return result;
+}
+
+int test_ft_putnbr_fd(void)
+{
+	int result = 0;
+
+	int tests[] = {
+		0,
+		1,
+		-1,
+		42,
+		-42,
+		2147483647,
+		-2147483648
+	};
+
+	int num_tests = sizeof(tests) / sizeof(tests[0]);
+
+	for (int i = 0; i < num_tests; i++)
+	{
+		if (run_putnbr_fd_test(tests[i]) != 0)
+		{
+			printf("❌ Test %d failed: input=%d\n", i, tests[i]);
 			result = 1;
 		}
 	}
