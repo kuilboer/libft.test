@@ -6,7 +6,7 @@
 #    By: okuilboe <okuilboe@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2025/04/25 16:17:43 by okuilboe      #+#    #+#                  #
-#    Updated: 2025/05/07 19:00:31 by okuilboe      ########   odam.nl          #
+#    Updated: 2025/05/17 20:44:48 by okuilboe      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LIB_LNK_TGT	:= $(CURDIR)/libft
 LIBRARY		= $(LIB_LNK_TGT)/libft.a
 
 CC 			:= cc
-CFLAGS		:= -Wall -Werror -Wextra 
+CFLAGS		:= -Wall -Werror -Wextra
 CPPFLAGS	:= -Ilibft -Iutils
 LDFLAGS 	:= -lbsd 		# -lbsd Instruct the gcc linker to link the libbsd library
 

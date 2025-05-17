@@ -6,16 +6,19 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/05/07 18:27:39 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 19:36:18 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 20:48:59 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
 #include "utils.h"
 #include "tsts.h"
-//#include "tsts.h"
+
+
 
 // Trusted reference function (from GLib or your own implementation)
 //char *glib__substr(const char *s, unsigned int start, size_t len);  // assume this exists
@@ -150,6 +153,27 @@ static int run_striteri_test(char *input, void (*f)(unsigned int, char *), const
 	else
 		printf("❌ Failed: got \"%s\", expected \"%s\"\n", buffer, expected);
 	return (1); // Failure
+}
+
+static int run_putchar_fd_test(char input_char)
+{
+	int		fd;
+	char	read_buf[2] = {0}; // One char + null terminator
+	char	*tmp_file = "tmp_putchar_fd.txt";
+
+	fd = open(tmp_file, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		return (1);
+
+	ft_putchar_fd(input_char, fd);
+	lseek(fd, 0, SEEK_SET);
+	read(fd, read_buf, 1);
+	close(fd);
+	unlink(tmp_file);
+
+	if (read_buf[0] != input_char)
+		return (1);
+	return (0);
 }
 
 int test_ft_split(void)
@@ -324,4 +348,23 @@ int test_ft_striteri(void)
 	// ft_striteri(NULL, to_upper);  // Should do nothing / not crash
 
 	return (fails);
+}
+
+int test_ft_putchar_fd(void)
+{
+	int result = 0;
+
+	char test_chars[] = {'A', '\n', 'z', '0', 127}; // Include normal, newline, edge-case ASCII
+	int num_tests = sizeof(test_chars) / sizeof(test_chars[0]);
+
+	for (int i = 0; i < num_tests; i++)
+	{
+		if (run_putchar_fd_test(test_chars[i]) != 0)
+		{
+			printf("❌ Test %d failed: input='%c' (ASCII %d)\n", i, test_chars[i], test_chars[i]);
+			result = 1;
+		}
+	}
+
+	return result;
 }

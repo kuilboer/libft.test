@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/25 16:07:29 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/17 19:26:39 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 20:26:27 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int main(void)
 		test_ft_itoa,
 		test_ft_strmapi,
 		test_ft_striteri,
+		test_ft_putchar_fd,
 	};
 	const char *part2_names[] = {
 		"ft_substr",
@@ -115,6 +116,7 @@ int main(void)
 		"ft_itoa",
 		"ft_strmapi",
 		"ft_striteri",
+		"ft_putchar_fd"
 	};
 
 	run_tests("Character Class Tests", char_tests, char_names, sizeof(char_tests)/sizeof(char_tests[0]));
