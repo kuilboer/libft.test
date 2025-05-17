@@ -6,7 +6,7 @@
 /*   By: okuilboe <okuilboe@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/04/28 15:35:57 by okuilboe      #+#    #+#                 */
-/*   Updated: 2025/05/07 14:47:10 by okuilboe      ########   odam.nl         */
+/*   Updated: 2025/05/17 22:55:14 by okuilboe      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,17 @@ static int run_memset_test(void *sys_s, void *ft_s, int c, size_t n)
 		return (1); //FAIL
 	}
 	return (0); //PASS
+}
+
+static int run_memchr_test(const void *input, int c, size_t n)
+{
+	void	*expected = memchr(input, c, n);
+	void	*actual = ft_memchr(input, c, n);
+
+	// Compare addresses or NULL
+	if (expected != actual)
+		return (1);
+	return (0);
 }
 
 int test_ft_bzero(void)
@@ -369,3 +380,36 @@ int test_ft_memset(void)
     return (0); // pass
 }
 
+int test_ft_memchr(void)
+{
+	int result = 0;
+
+	const char data[] = "abcdef\0ghij"; // includes null byte in the middle
+	struct {
+		const void	*buf;
+		int			c;
+		size_t		n;
+	} tests[] = {
+		{data, 'a', 6},    // found at index 0
+		{data, 'f', 6},    // found at index 5
+		{data, '\0', 10},  // found at index 6
+		{data, 'x', 10},   // not found
+		{data, 'g', 6},    // not found within first 6
+		{data, 'g', 8},    // found at index 7
+		{"", 'a', 0},      // empty buffer, should return NULL
+	};
+
+	int num_tests = sizeof(tests) / sizeof(tests[0]);
+
+	for (int i = 0; i < num_tests; i++)
+	{
+		if (run_memchr_test(tests[i].buf, tests[i].c, tests[i].n) != 0)
+		{
+			printf("❌ Test %d failed: buf=\"%s\", c=%d, n=%zu\n",
+				i, (const char *)tests[i].buf, tests[i].c, tests[i].n);
+			result = 1;
+		}
+	}
+
+	return result;
+}
